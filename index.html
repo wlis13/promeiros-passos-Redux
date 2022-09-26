@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/redux@latest/dist/redux.min.js"></script>
+    <style>
+      body {
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+      }
+
+      #container {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      button {
+        height: 50px;
+        width: 200px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <p>Color: <span id="value">white</span></p>
+      <button id="previous">Previous color</button>
+      <button id="next">Next color</button>
+    </div>
+    <script>
+      const INITIAL_STATE = {
+        colors: ['white', 'black', 'red', 'green', 'blue', 'yellow'],
+        index: 0,
+      };
+
+      let btnPreviews = document.getElementById('previous');
+      let btnNext = document.getElementById('next');
+
+      const PREVIEWS_BUTTON = 'PREVIEWS_BUTTON';
+      const NEXT_BUTTON = 'NEXT_BUTTON';
+
+      btnPreviews.addEventListener('click', () => {
+        store.dispatch({ type: PREVIEWS_BUTTON });
+        INITIAL_STATE.index = Math.floor(Math.random() * 5 - 0) + 0;
+      });
+      btnNext.addEventListener('click', () => {
+        store.dispatch({ type: NEXT_BUTTON });
+        INITIAL_STATE.index = Math.floor(Math.random() * 5 - 0) + 0;
+      });
+
+      const reducer = (state, action) => {
+        action.type === PREVIEWS_BUTTON
+          ? (state = INITIAL_STATE.colors[INITIAL_STATE.index])
+          : (state = INITIAL_STATE.colors[INITIAL_STATE.index]);
+
+        return state;
+      };
+
+      const store = Redux.createStore(reducer);
+      store.subscribe(() => {
+        let container = document.getElementById('container');
+        container.style.backgroundColor = store.getState();
+        let string = document.getElementById('value');
+        string.style.color = 'purple';
+        string.style.fontSize = '25pt';
+        string.innerText = store.getState();
+      });
+    </script>
+  </body>
+</html>
+
+<!--
+  Aqui temos um objeto com duas chaves
+a primeira é um array com nomes de cores
+e a outra é do tipo number que inicia com
+o número zero, na próxima etapa usei dois
+botões cada um com um evento de click,
+sendo que em cada evento foi atribuído
+ o valor de uma variável no parâmetro action
+(em cada evento uma variável diferente), e
+também em cada evento o valor da chave Index é
+modificado através da função Math.random() que
+atribui um valor sorteado de 0 á 5 na chave index.
+  Na próxima etapa foi feito o uso do reducer()
+em que esse uso consiste em uma condição que
+verifica qual é o valor da action, más ambos os
+valores vão receber o valor da chave colors com o
+valor do índice correspondente ao valor da chave index que
+como dito acima é um valor sorteado.
+  Com isso o store a cada clique vai receber uma valor
+do arrau colors sorteado e então na função subscribe()
+esse mesmo valor que após o clique vai ser inserido no srore
+vai também modificar o stilo do backgroundColor da página.
+-->
